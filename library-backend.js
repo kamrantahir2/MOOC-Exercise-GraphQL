@@ -115,6 +115,7 @@ const typeDefs = `
     bookCount: Int
     authorCount: Int
     allBooks: [Book]
+    allAuthors: [Author]
     findAuthor(name: String): Author
   }
 `;
@@ -124,6 +125,7 @@ const resolvers = {
     bookCount: () => books.length,
     authorCount: () => authors.length,
     allBooks: () => books,
+    allAuthors: () => authors,
     findAuthor: (root, args) => authors.find((a) => a.name === args.name),
   },
   Author: {
