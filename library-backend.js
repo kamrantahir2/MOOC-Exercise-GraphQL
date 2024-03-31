@@ -77,6 +77,7 @@ let books = [
     id: "afa5de02-344d-11e9-a414-719c6709cf3e",
     genres: ["refactoring", "design"],
   },
+
   {
     title: "Crime and punishment",
     published: 1866,
@@ -98,9 +99,23 @@ let books = [
 */
 
 const typeDefs = `
+  type Book {
+    title: String
+    author: String
+    published: String
+    genres: [String]
+  }
+
+  type Author {
+    name: String,
+    bookCount: Int
+  }
+
   type Query {
     bookCount: Int
     authorCount: Int
+    allBooks: [Book]
+    findAuthor(name: String): Author
   }
 `;
 
@@ -108,6 +123,19 @@ const resolvers = {
   Query: {
     bookCount: () => books.length,
     authorCount: () => authors.length,
+    allBooks: () => books,
+    findAuthor: (root, args) => authors.find((a) => a.name === args.name),
+  },
+  Author: {
+    bookCount: (root) => {
+      const count = books.reduce((counter, obj) => {
+        if (obj.author === root.name) {
+          counter += 1;
+        }
+        return counter;
+      }, 0);
+      return count;
+    },
   },
 };
 
